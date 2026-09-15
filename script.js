@@ -5,6 +5,7 @@ function Book(title, author, pageCount) {
     this.title = title;
     this.author = author;
     this.pageCount = pageCount
+    this.read = false
 }
 
 function addBookToLibrary(title,author,pageCount) {
@@ -21,6 +22,10 @@ bookInfo.addEventListener('submit', (event) => {
     displayBooks()
 });
 
+Book.prototype.toggleRead = function() {
+    this.read = !this.read
+}
+
 const bookDisplay = document.getElementById("bookDisplay")
 function displayBooks() {
     bookDisplay.replaceChildren()
@@ -33,10 +38,24 @@ function displayBooks() {
         bookTitle.textContent = (myLibrary[i].title)
 
         const bookAuthor = document.createElement("p")
-        bookAuthor.textContent = (myLibrary[i].author)
+        bookAuthor.textContent = ("written by: " + myLibrary[i].author)
 
         const bookPageCount = document.createElement("p")
-        bookPageCount.textContent = (myLibrary[i].pageCount)
+        bookPageCount.textContent = (myLibrary[i].pageCount + " total pages.")
+
+        const toggleReadBtn = document.createElement("button")
+        if (myLibrary[i].read == false) {
+            toggleReadBtn.textContent = ("Not Read")
+            bookCard.style.backgroundColor = "red"
+        } else {
+            toggleReadBtn.textContent = ("Read")
+            bookCard.style.backgroundColor = "green"
+        }
+        toggleReadBtn.addEventListener('click', (event) => {
+            myLibrary[i].toggleRead()
+            displayBooks()
+        })
+
 
         const deleteBtn = document.createElement("button")
         deleteBtn.textContent = ("Delete Book")
@@ -49,7 +68,15 @@ function displayBooks() {
         bookCard.appendChild(bookTitle)
         bookCard.appendChild(bookAuthor)
         bookCard.appendChild(bookPageCount)
+        bookCard.appendChild(toggleReadBtn)
         bookCard.appendChild(deleteBtn)
         bookDisplay.appendChild(bookCard)
     }
 }
+
+// Placeholder Books
+
+addBookToLibrary("14 Reasons Why", "John Allen", 196)
+addBookToLibrary("How to win BIG", "Big Guy", 14)
+addBookToLibrary("A Small Snail", "Small Ant", 6072)
+displayBooks()
